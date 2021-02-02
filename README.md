@@ -1,0 +1,2 @@
+# BidChain
+Bid on blockchain
