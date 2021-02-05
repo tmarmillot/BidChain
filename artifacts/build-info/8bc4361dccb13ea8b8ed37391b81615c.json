@@ -1,0 +1,2659 @@
+{
+  "id": "8bc4361dccb13ea8b8ed37391b81615c",
+  "_format": "hh-sol-build-info-1",
+  "solcVersion": "0.7.3",
+  "solcLongVersion": "0.7.3+commit.9bfce1f6",
+  "input": {
+    "language": "Solidity",
+    "sources": {
+      "contracts/OverbidBase.sol": {
+        "content": "// SPDX-License-Identifier: UNLICENSED\r\npragma solidity ^0.7.0;\r\n\r\ncontract OverbidBase {\r\n\r\n  event overbidCreated(\r\n    address indexed owner,\r\n    address indexed bid,\r\n    uint256 id,\r\n    uint256 price\r\n  );\r\n\r\n  struct Overbid {\r\n      uint256 id;\r\n      uint256 price;\r\n      address bid;\r\n  }\r\n\r\n  Overbid[] private overbids;\r\n\r\n  mapping (uint => address) public bidToOwner;\r\n  mapping (address => uint) ownerBidCount;\r\n\r\n      \r\n  function _generateRandomId(uint _str) private pure returns (uint) {\r\n      uint rand = uint(keccak256(abi.encodePacked(_str)));\r\n      return rand % 10**16;\r\n  }\r\n\r\n  function _createOverbid(uint256 _price,address _bid) internal {\r\n    Overbid memory _overbid = Overbid({\r\n      id: _generateRandomId(_price),\r\n      price: _price,\r\n      bid: _bid\r\n    });\r\n\r\n    overbids.push(_overbid);\r\n    uint i = overbids.length - 1;\r\n\r\n    overbids[i] = _overbid;\r\n\r\n    emit overbidCreated(msg.sender,_overbid.bid,_overbid.id,_overbid.price);\r\n  }\r\n\r\n  function createOverbid(uint256 _price,address _bid) external {\r\n    _createOverbid(_price, _bid);\r\n  }\r\n\r\n  function getOverbidByBid(address _bid) external view returns(uint[] memory) {\r\n        uint[] memory result = new uint[](1);\r\n        uint counter = 0;\r\n        for (uint i = 0; i < overbids.length; i++) {\r\n            if (overbids[i].bid == _bid) {\r\n                result[counter] = i;\r\n                counter++;\r\n            }\r\n        }\r\n        return result;\r\n    }\r\n\r\n  function info(uint _id) public view returns (uint256 id, uint256 price, address bid){\r\n    return (overbids[_id].id,overbids[_id].price,overbids[_id].bid);\r\n  }\r\n\r\n}"
+      }
+    },
+    "settings": {
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers"
+          ],
+          "": [
+            "ast"
+          ]
+        }
+      }
+    }
+  },
+  "output": {
+    "contracts": {
+      "contracts/OverbidBase.sol": {
+        "OverbidBase": {
+          "abi": [
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": true,
+                  "internalType": "address",
+                  "name": "owner",
+                  "type": "address"
+                },
+                {
+                  "indexed": true,
+                  "internalType": "address",
+                  "name": "bid",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "id",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "price",
+                  "type": "uint256"
+                }
+              ],
+              "name": "overbidCreated",
+              "type": "event"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "name": "bidToOwner",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "_price",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "_bid",
+                  "type": "address"
+                }
+              ],
+              "name": "createOverbid",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "_bid",
+                  "type": "address"
+                }
+              ],
+              "name": "getOverbidByBid",
+              "outputs": [
+                {
+                  "internalType": "uint256[]",
+                  "name": "",
+                  "type": "uint256[]"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "_id",
+                  "type": "uint256"
+                }
+              ],
+              "name": "info",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "id",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "price",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "bid",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            }
+          ],
+          "evm": {
+            "bytecode": {
+              "generatedSources": [],
+              "linkReferences": {},
+              "object": "608060405234801561001057600080fd5b506104c1806100206000396000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c80632e34059914610051578063dd5b627314610095578063ef406ea6146100ce578063f5aa0bc114610144575b600080fd5b61006e6004803603602081101561006757600080fd5b5035610172565b6040805193845260208401929092526001600160a01b031682820152519081900360600190f35b6100b2600480360360208110156100ab57600080fd5b50356101ec565b604080516001600160a01b039092168252519081900360200190f35b6100f4600480360360208110156100e457600080fd5b50356001600160a01b0316610207565b60408051602080825283518183015283519192839290830191858101910280838360005b83811015610130578181015183820152602001610118565b505050509050019250505060405180910390f35b6101706004803603604081101561015a57600080fd5b50803590602001356001600160a01b03166102a4565b005b600080600080848154811061018357fe5b906000526020600020906003020160000154600085815481106101a257fe5b906000526020600020906003020160010154600086815481106101c157fe5b600091825260209091206002600390920201015491945092506001600160a01b031690509193909250565b6001602052600090815260409020546001600160a01b031681565b604080516001808252818301909252606091829190602080830190803683370190505090506000805b60005481101561029b57846001600160a01b03166000828154811061025157fe5b60009182526020909120600260039092020101546001600160a01b03161415610293578083838151811061028157fe5b60209081029190910101526001909101905b600101610230565b50909392505050565b6102ae82826102b2565b5050565b6102ba610461565b60405180606001604052806102ce85610433565b815260208082018690526001600160a01b038581166040938401526000805460018101825581805285517f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e563600390920291820155928501517f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e564840155928401517f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e56590920180546001600160a01b031916929091169190911790558054919250600019820191839190839081106103a057fe5b6000918252602091829020835160039290920201908155828201516001820155604092830151600290910180546001600160a01b0319166001600160a01b0392831617905584830151855186840151855191825293810193909352835191169233927fb30a02fce1f8b812a91b6fedd5e34e705b8f15bf994a83e5a21fc32c1d5f71a3929081900390910190a350505050565b604080516020808201939093528151808203840181529082019091528051910120662386f26fc10000900690565b6040518060600160405280600081526020016000815260200160006001600160a01b03168152509056fea2646970667358221220d0a48aab27b341f1867d11a9e1141897ce7dc25e1df8845c9ce7642f55b28b8c64736f6c63430007030033",
+              "opcodes": "PUSH1 0x80 PUSH1 0x40 MSTORE CALLVALUE DUP1 ISZERO PUSH2 0x10 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH2 0x4C1 DUP1 PUSH2 0x20 PUSH1 0x0 CODECOPY PUSH1 0x0 RETURN INVALID PUSH1 0x80 PUSH1 0x40 MSTORE CALLVALUE DUP1 ISZERO PUSH2 0x10 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH1 0x4 CALLDATASIZE LT PUSH2 0x4C JUMPI PUSH1 0x0 CALLDATALOAD PUSH1 0xE0 SHR DUP1 PUSH4 0x2E340599 EQ PUSH2 0x51 JUMPI DUP1 PUSH4 0xDD5B6273 EQ PUSH2 0x95 JUMPI DUP1 PUSH4 0xEF406EA6 EQ PUSH2 0xCE JUMPI DUP1 PUSH4 0xF5AA0BC1 EQ PUSH2 0x144 JUMPI JUMPDEST PUSH1 0x0 DUP1 REVERT JUMPDEST PUSH2 0x6E PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x20 DUP2 LT ISZERO PUSH2 0x67 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP CALLDATALOAD PUSH2 0x172 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD SWAP4 DUP5 MSTORE PUSH1 0x20 DUP5 ADD SWAP3 SWAP1 SWAP3 MSTORE PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND DUP3 DUP3 ADD MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x60 ADD SWAP1 RETURN JUMPDEST PUSH2 0xB2 PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x20 DUP2 LT ISZERO PUSH2 0xAB JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP CALLDATALOAD PUSH2 0x1EC JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB SWAP1 SWAP3 AND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0xF4 PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x20 DUP2 LT ISZERO PUSH2 0xE4 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP CALLDATALOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND PUSH2 0x207 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH1 0x20 DUP1 DUP3 MSTORE DUP4 MLOAD DUP2 DUP4 ADD MSTORE DUP4 MLOAD SWAP2 SWAP3 DUP4 SWAP3 SWAP1 DUP4 ADD SWAP2 DUP6 DUP2 ADD SWAP2 MUL DUP1 DUP4 DUP4 PUSH1 0x0 JUMPDEST DUP4 DUP2 LT ISZERO PUSH2 0x130 JUMPI DUP2 DUP2 ADD MLOAD DUP4 DUP3 ADD MSTORE PUSH1 0x20 ADD PUSH2 0x118 JUMP JUMPDEST POP POP POP POP SWAP1 POP ADD SWAP3 POP POP POP PUSH1 0x40 MLOAD DUP1 SWAP2 SUB SWAP1 RETURN JUMPDEST PUSH2 0x170 PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x40 DUP2 LT ISZERO PUSH2 0x15A JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP DUP1 CALLDATALOAD SWAP1 PUSH1 0x20 ADD CALLDATALOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND PUSH2 0x2A4 JUMP JUMPDEST STOP JUMPDEST PUSH1 0x0 DUP1 PUSH1 0x0 DUP1 DUP5 DUP2 SLOAD DUP2 LT PUSH2 0x183 JUMPI INVALID JUMPDEST SWAP1 PUSH1 0x0 MSTORE PUSH1 0x20 PUSH1 0x0 KECCAK256 SWAP1 PUSH1 0x3 MUL ADD PUSH1 0x0 ADD SLOAD PUSH1 0x0 DUP6 DUP2 SLOAD DUP2 LT PUSH2 0x1A2 JUMPI INVALID JUMPDEST SWAP1 PUSH1 0x0 MSTORE PUSH1 0x20 PUSH1 0x0 KECCAK256 SWAP1 PUSH1 0x3 MUL ADD PUSH1 0x1 ADD SLOAD PUSH1 0x0 DUP7 DUP2 SLOAD DUP2 LT PUSH2 0x1C1 JUMPI INVALID JUMPDEST PUSH1 0x0 SWAP2 DUP3 MSTORE PUSH1 0x20 SWAP1 SWAP2 KECCAK256 PUSH1 0x2 PUSH1 0x3 SWAP1 SWAP3 MUL ADD ADD SLOAD SWAP2 SWAP5 POP SWAP3 POP PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND SWAP1 POP SWAP2 SWAP4 SWAP1 SWAP3 POP JUMP JUMPDEST PUSH1 0x1 PUSH1 0x20 MSTORE PUSH1 0x0 SWAP1 DUP2 MSTORE PUSH1 0x40 SWAP1 KECCAK256 SLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND DUP2 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH1 0x1 DUP1 DUP3 MSTORE DUP2 DUP4 ADD SWAP1 SWAP3 MSTORE PUSH1 0x60 SWAP2 DUP3 SWAP2 SWAP1 PUSH1 0x20 DUP1 DUP4 ADD SWAP1 DUP1 CALLDATASIZE DUP4 CALLDATACOPY ADD SWAP1 POP POP SWAP1 POP PUSH1 0x0 DUP1 JUMPDEST PUSH1 0x0 SLOAD DUP2 LT ISZERO PUSH2 0x29B JUMPI DUP5 PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND PUSH1 0x0 DUP3 DUP2 SLOAD DUP2 LT PUSH2 0x251 JUMPI INVALID JUMPDEST PUSH1 0x0 SWAP2 DUP3 MSTORE PUSH1 0x20 SWAP1 SWAP2 KECCAK256 PUSH1 0x2 PUSH1 0x3 SWAP1 SWAP3 MUL ADD ADD SLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND EQ ISZERO PUSH2 0x293 JUMPI DUP1 DUP4 DUP4 DUP2 MLOAD DUP2 LT PUSH2 0x281 JUMPI INVALID JUMPDEST PUSH1 0x20 SWAP1 DUP2 MUL SWAP2 SWAP1 SWAP2 ADD ADD MSTORE PUSH1 0x1 SWAP1 SWAP2 ADD SWAP1 JUMPDEST PUSH1 0x1 ADD PUSH2 0x230 JUMP JUMPDEST POP SWAP1 SWAP4 SWAP3 POP POP POP JUMP JUMPDEST PUSH2 0x2AE DUP3 DUP3 PUSH2 0x2B2 JUMP JUMPDEST POP POP JUMP JUMPDEST PUSH2 0x2BA PUSH2 0x461 JUMP JUMPDEST PUSH1 0x40 MLOAD DUP1 PUSH1 0x60 ADD PUSH1 0x40 MSTORE DUP1 PUSH2 0x2CE DUP6 PUSH2 0x433 JUMP JUMPDEST DUP2 MSTORE PUSH1 0x20 DUP1 DUP3 ADD DUP7 SWAP1 MSTORE PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB DUP6 DUP2 AND PUSH1 0x40 SWAP4 DUP5 ADD MSTORE PUSH1 0x0 DUP1 SLOAD PUSH1 0x1 DUP2 ADD DUP3 SSTORE DUP2 DUP1 MSTORE DUP6 MLOAD PUSH32 0x290DECD9548B62A8D60345A988386FC84BA6BC95484008F6362F93160EF3E563 PUSH1 0x3 SWAP1 SWAP3 MUL SWAP2 DUP3 ADD SSTORE SWAP3 DUP6 ADD MLOAD PUSH32 0x290DECD9548B62A8D60345A988386FC84BA6BC95484008F6362F93160EF3E564 DUP5 ADD SSTORE SWAP3 DUP5 ADD MLOAD PUSH32 0x290DECD9548B62A8D60345A988386FC84BA6BC95484008F6362F93160EF3E565 SWAP1 SWAP3 ADD DUP1 SLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB NOT AND SWAP3 SWAP1 SWAP2 AND SWAP2 SWAP1 SWAP2 OR SWAP1 SSTORE DUP1 SLOAD SWAP2 SWAP3 POP PUSH1 0x0 NOT DUP3 ADD SWAP2 DUP4 SWAP2 SWAP1 DUP4 SWAP1 DUP2 LT PUSH2 0x3A0 JUMPI INVALID JUMPDEST PUSH1 0x0 SWAP2 DUP3 MSTORE PUSH1 0x20 SWAP2 DUP3 SWAP1 KECCAK256 DUP4 MLOAD PUSH1 0x3 SWAP3 SWAP1 SWAP3 MUL ADD SWAP1 DUP2 SSTORE DUP3 DUP3 ADD MLOAD PUSH1 0x1 DUP3 ADD SSTORE PUSH1 0x40 SWAP3 DUP4 ADD MLOAD PUSH1 0x2 SWAP1 SWAP2 ADD DUP1 SLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB NOT AND PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB SWAP3 DUP4 AND OR SWAP1 SSTORE DUP5 DUP4 ADD MLOAD DUP6 MLOAD DUP7 DUP5 ADD MLOAD DUP6 MLOAD SWAP2 DUP3 MSTORE SWAP4 DUP2 ADD SWAP4 SWAP1 SWAP4 MSTORE DUP4 MLOAD SWAP2 AND SWAP3 CALLER SWAP3 PUSH32 0xB30A02FCE1F8B812A91B6FEDD5E34E705B8F15BF994A83E5A21FC32C1D5F71A3 SWAP3 SWAP1 DUP2 SWAP1 SUB SWAP1 SWAP2 ADD SWAP1 LOG3 POP POP POP POP JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH1 0x20 DUP1 DUP3 ADD SWAP4 SWAP1 SWAP4 MSTORE DUP2 MLOAD DUP1 DUP3 SUB DUP5 ADD DUP2 MSTORE SWAP1 DUP3 ADD SWAP1 SWAP2 MSTORE DUP1 MLOAD SWAP2 ADD KECCAK256 PUSH7 0x2386F26FC10000 SWAP1 MOD SWAP1 JUMP JUMPDEST PUSH1 0x40 MLOAD DUP1 PUSH1 0x60 ADD PUSH1 0x40 MSTORE DUP1 PUSH1 0x0 DUP2 MSTORE PUSH1 0x20 ADD PUSH1 0x0 DUP2 MSTORE PUSH1 0x20 ADD PUSH1 0x0 PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND DUP2 MSTORE POP SWAP1 JUMP INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 0xD0 LOG4 DUP11 0xAB 0x27 0xB3 COINBASE CALL DUP7 PUSH30 0x11A9E1141897CE7DC25E1DF8845C9CE7642F55B28B8C64736F6C63430007 SUB STOP CALLER ",
+              "sourceMap": "67:1571:0:-:0;;;;;;;;;;;;;;;;;;;"
+            },
+            "deployedBytecode": {
+              "generatedSources": [],
+              "immutableReferences": {},
+              "linkReferences": {},
+              "object": "608060405234801561001057600080fd5b506004361061004c5760003560e01c80632e34059914610051578063dd5b627314610095578063ef406ea6146100ce578063f5aa0bc114610144575b600080fd5b61006e6004803603602081101561006757600080fd5b5035610172565b6040805193845260208401929092526001600160a01b031682820152519081900360600190f35b6100b2600480360360208110156100ab57600080fd5b50356101ec565b604080516001600160a01b039092168252519081900360200190f35b6100f4600480360360208110156100e457600080fd5b50356001600160a01b0316610207565b60408051602080825283518183015283519192839290830191858101910280838360005b83811015610130578181015183820152602001610118565b505050509050019250505060405180910390f35b6101706004803603604081101561015a57600080fd5b50803590602001356001600160a01b03166102a4565b005b600080600080848154811061018357fe5b906000526020600020906003020160000154600085815481106101a257fe5b906000526020600020906003020160010154600086815481106101c157fe5b600091825260209091206002600390920201015491945092506001600160a01b031690509193909250565b6001602052600090815260409020546001600160a01b031681565b604080516001808252818301909252606091829190602080830190803683370190505090506000805b60005481101561029b57846001600160a01b03166000828154811061025157fe5b60009182526020909120600260039092020101546001600160a01b03161415610293578083838151811061028157fe5b60209081029190910101526001909101905b600101610230565b50909392505050565b6102ae82826102b2565b5050565b6102ba610461565b60405180606001604052806102ce85610433565b815260208082018690526001600160a01b038581166040938401526000805460018101825581805285517f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e563600390920291820155928501517f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e564840155928401517f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e56590920180546001600160a01b031916929091169190911790558054919250600019820191839190839081106103a057fe5b6000918252602091829020835160039290920201908155828201516001820155604092830151600290910180546001600160a01b0319166001600160a01b0392831617905584830151855186840151855191825293810193909352835191169233927fb30a02fce1f8b812a91b6fedd5e34e705b8f15bf994a83e5a21fc32c1d5f71a3929081900390910190a350505050565b604080516020808201939093528151808203840181529082019091528051910120662386f26fc10000900690565b6040518060600160405280600081526020016000815260200160006001600160a01b03168152509056fea2646970667358221220d0a48aab27b341f1867d11a9e1141897ce7dc25e1df8845c9ce7642f55b28b8c64736f6c63430007030033",
+              "opcodes": "PUSH1 0x80 PUSH1 0x40 MSTORE CALLVALUE DUP1 ISZERO PUSH2 0x10 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH1 0x4 CALLDATASIZE LT PUSH2 0x4C JUMPI PUSH1 0x0 CALLDATALOAD PUSH1 0xE0 SHR DUP1 PUSH4 0x2E340599 EQ PUSH2 0x51 JUMPI DUP1 PUSH4 0xDD5B6273 EQ PUSH2 0x95 JUMPI DUP1 PUSH4 0xEF406EA6 EQ PUSH2 0xCE JUMPI DUP1 PUSH4 0xF5AA0BC1 EQ PUSH2 0x144 JUMPI JUMPDEST PUSH1 0x0 DUP1 REVERT JUMPDEST PUSH2 0x6E PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x20 DUP2 LT ISZERO PUSH2 0x67 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP CALLDATALOAD PUSH2 0x172 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD SWAP4 DUP5 MSTORE PUSH1 0x20 DUP5 ADD SWAP3 SWAP1 SWAP3 MSTORE PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND DUP3 DUP3 ADD MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x60 ADD SWAP1 RETURN JUMPDEST PUSH2 0xB2 PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x20 DUP2 LT ISZERO PUSH2 0xAB JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP CALLDATALOAD PUSH2 0x1EC JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB SWAP1 SWAP3 AND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0xF4 PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x20 DUP2 LT ISZERO PUSH2 0xE4 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP CALLDATALOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND PUSH2 0x207 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH1 0x20 DUP1 DUP3 MSTORE DUP4 MLOAD DUP2 DUP4 ADD MSTORE DUP4 MLOAD SWAP2 SWAP3 DUP4 SWAP3 SWAP1 DUP4 ADD SWAP2 DUP6 DUP2 ADD SWAP2 MUL DUP1 DUP4 DUP4 PUSH1 0x0 JUMPDEST DUP4 DUP2 LT ISZERO PUSH2 0x130 JUMPI DUP2 DUP2 ADD MLOAD DUP4 DUP3 ADD MSTORE PUSH1 0x20 ADD PUSH2 0x118 JUMP JUMPDEST POP POP POP POP SWAP1 POP ADD SWAP3 POP POP POP PUSH1 0x40 MLOAD DUP1 SWAP2 SUB SWAP1 RETURN JUMPDEST PUSH2 0x170 PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x40 DUP2 LT ISZERO PUSH2 0x15A JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP DUP1 CALLDATALOAD SWAP1 PUSH1 0x20 ADD CALLDATALOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND PUSH2 0x2A4 JUMP JUMPDEST STOP JUMPDEST PUSH1 0x0 DUP1 PUSH1 0x0 DUP1 DUP5 DUP2 SLOAD DUP2 LT PUSH2 0x183 JUMPI INVALID JUMPDEST SWAP1 PUSH1 0x0 MSTORE PUSH1 0x20 PUSH1 0x0 KECCAK256 SWAP1 PUSH1 0x3 MUL ADD PUSH1 0x0 ADD SLOAD PUSH1 0x0 DUP6 DUP2 SLOAD DUP2 LT PUSH2 0x1A2 JUMPI INVALID JUMPDEST SWAP1 PUSH1 0x0 MSTORE PUSH1 0x20 PUSH1 0x0 KECCAK256 SWAP1 PUSH1 0x3 MUL ADD PUSH1 0x1 ADD SLOAD PUSH1 0x0 DUP7 DUP2 SLOAD DUP2 LT PUSH2 0x1C1 JUMPI INVALID JUMPDEST PUSH1 0x0 SWAP2 DUP3 MSTORE PUSH1 0x20 SWAP1 SWAP2 KECCAK256 PUSH1 0x2 PUSH1 0x3 SWAP1 SWAP3 MUL ADD ADD SLOAD SWAP2 SWAP5 POP SWAP3 POP PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND SWAP1 POP SWAP2 SWAP4 SWAP1 SWAP3 POP JUMP JUMPDEST PUSH1 0x1 PUSH1 0x20 MSTORE PUSH1 0x0 SWAP1 DUP2 MSTORE PUSH1 0x40 SWAP1 KECCAK256 SLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND DUP2 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH1 0x1 DUP1 DUP3 MSTORE DUP2 DUP4 ADD SWAP1 SWAP3 MSTORE PUSH1 0x60 SWAP2 DUP3 SWAP2 SWAP1 PUSH1 0x20 DUP1 DUP4 ADD SWAP1 DUP1 CALLDATASIZE DUP4 CALLDATACOPY ADD SWAP1 POP POP SWAP1 POP PUSH1 0x0 DUP1 JUMPDEST PUSH1 0x0 SLOAD DUP2 LT ISZERO PUSH2 0x29B JUMPI DUP5 PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND PUSH1 0x0 DUP3 DUP2 SLOAD DUP2 LT PUSH2 0x251 JUMPI INVALID JUMPDEST PUSH1 0x0 SWAP2 DUP3 MSTORE PUSH1 0x20 SWAP1 SWAP2 KECCAK256 PUSH1 0x2 PUSH1 0x3 SWAP1 SWAP3 MUL ADD ADD SLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND EQ ISZERO PUSH2 0x293 JUMPI DUP1 DUP4 DUP4 DUP2 MLOAD DUP2 LT PUSH2 0x281 JUMPI INVALID JUMPDEST PUSH1 0x20 SWAP1 DUP2 MUL SWAP2 SWAP1 SWAP2 ADD ADD MSTORE PUSH1 0x1 SWAP1 SWAP2 ADD SWAP1 JUMPDEST PUSH1 0x1 ADD PUSH2 0x230 JUMP JUMPDEST POP SWAP1 SWAP4 SWAP3 POP POP POP JUMP JUMPDEST PUSH2 0x2AE DUP3 DUP3 PUSH2 0x2B2 JUMP JUMPDEST POP POP JUMP JUMPDEST PUSH2 0x2BA PUSH2 0x461 JUMP JUMPDEST PUSH1 0x40 MLOAD DUP1 PUSH1 0x60 ADD PUSH1 0x40 MSTORE DUP1 PUSH2 0x2CE DUP6 PUSH2 0x433 JUMP JUMPDEST DUP2 MSTORE PUSH1 0x20 DUP1 DUP3 ADD DUP7 SWAP1 MSTORE PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB DUP6 DUP2 AND PUSH1 0x40 SWAP4 DUP5 ADD MSTORE PUSH1 0x0 DUP1 SLOAD PUSH1 0x1 DUP2 ADD DUP3 SSTORE DUP2 DUP1 MSTORE DUP6 MLOAD PUSH32 0x290DECD9548B62A8D60345A988386FC84BA6BC95484008F6362F93160EF3E563 PUSH1 0x3 SWAP1 SWAP3 MUL SWAP2 DUP3 ADD SSTORE SWAP3 DUP6 ADD MLOAD PUSH32 0x290DECD9548B62A8D60345A988386FC84BA6BC95484008F6362F93160EF3E564 DUP5 ADD SSTORE SWAP3 DUP5 ADD MLOAD PUSH32 0x290DECD9548B62A8D60345A988386FC84BA6BC95484008F6362F93160EF3E565 SWAP1 SWAP3 ADD DUP1 SLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB NOT AND SWAP3 SWAP1 SWAP2 AND SWAP2 SWAP1 SWAP2 OR SWAP1 SSTORE DUP1 SLOAD SWAP2 SWAP3 POP PUSH1 0x0 NOT DUP3 ADD SWAP2 DUP4 SWAP2 SWAP1 DUP4 SWAP1 DUP2 LT PUSH2 0x3A0 JUMPI INVALID JUMPDEST PUSH1 0x0 SWAP2 DUP3 MSTORE PUSH1 0x20 SWAP2 DUP3 SWAP1 KECCAK256 DUP4 MLOAD PUSH1 0x3 SWAP3 SWAP1 SWAP3 MUL ADD SWAP1 DUP2 SSTORE DUP3 DUP3 ADD MLOAD PUSH1 0x1 DUP3 ADD SSTORE PUSH1 0x40 SWAP3 DUP4 ADD MLOAD PUSH1 0x2 SWAP1 SWAP2 ADD DUP1 SLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB NOT AND PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB SWAP3 DUP4 AND OR SWAP1 SSTORE DUP5 DUP4 ADD MLOAD DUP6 MLOAD DUP7 DUP5 ADD MLOAD DUP6 MLOAD SWAP2 DUP3 MSTORE SWAP4 DUP2 ADD SWAP4 SWAP1 SWAP4 MSTORE DUP4 MLOAD SWAP2 AND SWAP3 CALLER SWAP3 PUSH32 0xB30A02FCE1F8B812A91B6FEDD5E34E705B8F15BF994A83E5A21FC32C1D5F71A3 SWAP3 SWAP1 DUP2 SWAP1 SUB SWAP1 SWAP2 ADD SWAP1 LOG3 POP POP POP POP JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH1 0x20 DUP1 DUP3 ADD SWAP4 SWAP1 SWAP4 MSTORE DUP2 MLOAD DUP1 DUP3 SUB DUP5 ADD DUP2 MSTORE SWAP1 DUP3 ADD SWAP1 SWAP2 MSTORE DUP1 MLOAD SWAP2 ADD KECCAK256 PUSH7 0x2386F26FC10000 SWAP1 MOD SWAP1 JUMP JUMPDEST PUSH1 0x40 MLOAD DUP1 PUSH1 0x60 ADD PUSH1 0x40 MSTORE DUP1 PUSH1 0x0 DUP2 MSTORE PUSH1 0x20 ADD PUSH1 0x0 DUP2 MSTORE PUSH1 0x20 ADD PUSH1 0x0 PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND DUP2 MSTORE POP SWAP1 JUMP INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 0xD0 LOG4 DUP11 0xAB 0x27 0xB3 COINBASE CALL DUP7 PUSH30 0x11A9E1141897CE7DC25E1DF8845C9CE7642F55B28B8C64736F6C63430007 SUB STOP CALLER ",
+              "sourceMap": "67:1571:0:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1473:160;;;;;;;;;;;;;;;;-1:-1:-1;1473:160:0;;:::i;:::-;;;;;;;;;;;;;;-1:-1:-1;;;;;1473:160:0;;;;;;;;;;;;;;339:43;;;;;;;;;;;;;;;;-1:-1:-1;339:43:0;;:::i;:::-;;;;-1:-1:-1;;;;;339:43:0;;;;;;;;;;;;;;1095:372;;;;;;;;;;;;;;;;-1:-1:-1;1095:372:0;-1:-1:-1;;;;;1095:372:0;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;987:102;;;;;;;;;;;;;;;;-1:-1:-1;987:102:0;;;;;;-1:-1:-1;;;;;987:102:0;;:::i;:::-;;1473:160;1518:10;1530:13;1545:11;1572:8;1581:3;1572:13;;;;;;;;;;;;;;;;;;:16;;;1589:8;1598:3;1589:13;;;;;;;;;;;;;;;;;;:19;;;1609:8;1618:3;1609:13;;;;;;;;;;;;;;;;:17;:13;;;;;:17;;1564:63;;-1:-1:-1;1564:63:0;-1:-1:-1;;;;;;1609:17:0;;-1:-1:-1;1473:160:0;;;;;:::o;339:43::-;;;;;;;;;;;;-1:-1:-1;;;;;339:43:0;;:::o;1095:372::-;1205:13;;;1216:1;1205:13;;;;;;;;;1156;;;;1205;;;;;;;;;;;;-1:-1:-1;1205:13:0;1182:36;;1229:12;1261:6;1256:180;1277:8;:15;1273:19;;1256:180;;;1337:4;-1:-1:-1;;;;;1318:23:0;:8;1327:1;1318:11;;;;;;;;;;;;;;;;:15;:11;;;;;:15;;-1:-1:-1;;;;;1318:15:0;:23;1314:111;;;1380:1;1362:6;1369:7;1362:15;;;;;;;;;;;;;;;;;:19;1400:9;;;;;1314:111;1294:3;;1256:180;;;-1:-1:-1;1453:6:0;;1095:372;-1:-1:-1;;;1095:372:0:o;987:102::-;1055:28;1070:6;1078:4;1055:14;:28::i;:::-;987:102;;:::o;608:373::-;677:23;;:::i;:::-;703:94;;;;;;;;724:25;742:6;724:17;:25::i;:::-;703:94;;;;;;;;;-1:-1:-1;;;;;703:94:0;;;;;;;;-1:-1:-1;806:23:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;;806:23:0;;;;;;;;;;;845:15;;806:23;;-1:-1:-1;;;845:19:0;;;806:23;;-1:-1:-1;845:19:0;;873:11;;;;;;;;;;;;;;;:22;;:11;;;;;;:22;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;;873:22:0;-1:-1:-1;;;;;873:22:0;;;;;;935:12;;;;948:11;;960:14;;;;909:66;;;;;;;;;;;;;;;;;924:10;;909:66;;;;;;;;;;;608:373;;;;:::o;441:161::-;543:22;;;;;;;;;;;;;;;;;;;;;;;;;;533:33;;;;;590:6;583:13;;;441:161::o;-1:-1:-1:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o"
+            },
+            "methodIdentifiers": {
+              "bidToOwner(uint256)": "dd5b6273",
+              "createOverbid(uint256,address)": "f5aa0bc1",
+              "getOverbidByBid(address)": "ef406ea6",
+              "info(uint256)": "2e340599"
+            }
+          }
+        }
+      }
+    },
+    "sources": {
+      "contracts/OverbidBase.sol": {
+        "ast": {
+          "absolutePath": "contracts/OverbidBase.sol",
+          "exportedSymbols": {
+            "OverbidBase": [
+              199
+            ]
+          },
+          "id": 200,
+          "license": "UNLICENSED",
+          "nodeType": "SourceUnit",
+          "nodes": [
+            {
+              "id": 1,
+              "literals": [
+                "solidity",
+                "^",
+                "0.7",
+                ".0"
+              ],
+              "nodeType": "PragmaDirective",
+              "src": "40:23:0"
+            },
+            {
+              "abstract": false,
+              "baseContracts": [],
+              "contractDependencies": [],
+              "contractKind": "contract",
+              "fullyImplemented": true,
+              "id": 199,
+              "linearizedBaseContracts": [
+                199
+              ],
+              "name": "OverbidBase",
+              "nodeType": "ContractDefinition",
+              "nodes": [
+                {
+                  "anonymous": false,
+                  "id": 11,
+                  "name": "overbidCreated",
+                  "nodeType": "EventDefinition",
+                  "parameters": {
+                    "id": 10,
+                    "nodeType": "ParameterList",
+                    "parameters": [
+                      {
+                        "constant": false,
+                        "id": 3,
+                        "indexed": true,
+                        "mutability": "mutable",
+                        "name": "owner",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 11,
+                        "src": "122:21:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "typeName": {
+                          "id": 2,
+                          "name": "address",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "122:7:0",
+                          "stateMutability": "nonpayable",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "visibility": "internal"
+                      },
+                      {
+                        "constant": false,
+                        "id": 5,
+                        "indexed": true,
+                        "mutability": "mutable",
+                        "name": "bid",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 11,
+                        "src": "150:19:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "typeName": {
+                          "id": 4,
+                          "name": "address",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "150:7:0",
+                          "stateMutability": "nonpayable",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "visibility": "internal"
+                      },
+                      {
+                        "constant": false,
+                        "id": 7,
+                        "indexed": false,
+                        "mutability": "mutable",
+                        "name": "id",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 11,
+                        "src": "176:10:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "typeName": {
+                          "id": 6,
+                          "name": "uint256",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "176:7:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "visibility": "internal"
+                      },
+                      {
+                        "constant": false,
+                        "id": 9,
+                        "indexed": false,
+                        "mutability": "mutable",
+                        "name": "price",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 11,
+                        "src": "193:13:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "typeName": {
+                          "id": 8,
+                          "name": "uint256",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "193:7:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "visibility": "internal"
+                      }
+                    ],
+                    "src": "115:96:0"
+                  },
+                  "src": "95:117:0"
+                },
+                {
+                  "canonicalName": "OverbidBase.Overbid",
+                  "id": 18,
+                  "members": [
+                    {
+                      "constant": false,
+                      "id": 13,
+                      "mutability": "mutable",
+                      "name": "id",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 18,
+                      "src": "242:10:0",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "typeName": {
+                        "id": 12,
+                        "name": "uint256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "242:7:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "visibility": "internal"
+                    },
+                    {
+                      "constant": false,
+                      "id": 15,
+                      "mutability": "mutable",
+                      "name": "price",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 18,
+                      "src": "261:13:0",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "typeName": {
+                        "id": 14,
+                        "name": "uint256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "261:7:0",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "visibility": "internal"
+                    },
+                    {
+                      "constant": false,
+                      "id": 17,
+                      "mutability": "mutable",
+                      "name": "bid",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 18,
+                      "src": "283:11:0",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      },
+                      "typeName": {
+                        "id": 16,
+                        "name": "address",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "283:7:0",
+                        "stateMutability": "nonpayable",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "name": "Overbid",
+                  "nodeType": "StructDefinition",
+                  "scope": 199,
+                  "src": "218:82:0",
+                  "visibility": "public"
+                },
+                {
+                  "constant": false,
+                  "id": 21,
+                  "mutability": "mutable",
+                  "name": "overbids",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 199,
+                  "src": "306:26:0",
+                  "stateVariable": true,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_struct$_Overbid_$18_storage_$dyn_storage",
+                    "typeString": "struct OverbidBase.Overbid[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 19,
+                      "name": "Overbid",
+                      "nodeType": "UserDefinedTypeName",
+                      "referencedDeclaration": 18,
+                      "src": "306:7:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Overbid_$18_storage_ptr",
+                        "typeString": "struct OverbidBase.Overbid"
+                      }
+                    },
+                    "id": 20,
+                    "nodeType": "ArrayTypeName",
+                    "src": "306:9:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_struct$_Overbid_$18_storage_$dyn_storage_ptr",
+                      "typeString": "struct OverbidBase.Overbid[]"
+                    }
+                  },
+                  "visibility": "private"
+                },
+                {
+                  "constant": false,
+                  "functionSelector": "dd5b6273",
+                  "id": 25,
+                  "mutability": "mutable",
+                  "name": "bidToOwner",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 199,
+                  "src": "339:43:0",
+                  "stateVariable": true,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+                    "typeString": "mapping(uint256 => address)"
+                  },
+                  "typeName": {
+                    "id": 24,
+                    "keyType": {
+                      "id": 22,
+                      "name": "uint",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "348:4:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Mapping",
+                    "src": "339:25:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+                      "typeString": "mapping(uint256 => address)"
+                    },
+                    "valueType": {
+                      "id": 23,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "356:7:0",
+                      "stateMutability": "nonpayable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    }
+                  },
+                  "visibility": "public"
+                },
+                {
+                  "constant": false,
+                  "id": 29,
+                  "mutability": "mutable",
+                  "name": "ownerBidCount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 199,
+                  "src": "387:39:0",
+                  "stateVariable": true,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                    "typeString": "mapping(address => uint256)"
+                  },
+                  "typeName": {
+                    "id": 28,
+                    "keyType": {
+                      "id": 26,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "396:7:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Mapping",
+                    "src": "387:25:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                      "typeString": "mapping(address => uint256)"
+                    },
+                    "valueType": {
+                      "id": 27,
+                      "name": "uint",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "407:4:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "body": {
+                    "id": 54,
+                    "nodeType": "Block",
+                    "src": "507:95:0",
+                    "statements": [
+                      {
+                        "assignments": [
+                          37
+                        ],
+                        "declarations": [
+                          {
+                            "constant": false,
+                            "id": 37,
+                            "mutability": "mutable",
+                            "name": "rand",
+                            "nodeType": "VariableDeclaration",
+                            "scope": 54,
+                            "src": "516:9:0",
+                            "stateVariable": false,
+                            "storageLocation": "default",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            },
+                            "typeName": {
+                              "id": 36,
+                              "name": "uint",
+                              "nodeType": "ElementaryTypeName",
+                              "src": "516:4:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            },
+                            "visibility": "internal"
+                          }
+                        ],
+                        "id": 47,
+                        "initialValue": {
+                          "arguments": [
+                            {
+                              "arguments": [
+                                {
+                                  "arguments": [
+                                    {
+                                      "id": 43,
+                                      "name": "_str",
+                                      "nodeType": "Identifier",
+                                      "overloadedDeclarations": [],
+                                      "referencedDeclaration": 31,
+                                      "src": "560:4:0",
+                                      "typeDescriptions": {
+                                        "typeIdentifier": "t_uint256",
+                                        "typeString": "uint256"
+                                      }
+                                    }
+                                  ],
+                                  "expression": {
+                                    "argumentTypes": [
+                                      {
+                                        "typeIdentifier": "t_uint256",
+                                        "typeString": "uint256"
+                                      }
+                                    ],
+                                    "expression": {
+                                      "id": 41,
+                                      "name": "abi",
+                                      "nodeType": "Identifier",
+                                      "overloadedDeclarations": [],
+                                      "referencedDeclaration": -1,
+                                      "src": "543:3:0",
+                                      "typeDescriptions": {
+                                        "typeIdentifier": "t_magic_abi",
+                                        "typeString": "abi"
+                                      }
+                                    },
+                                    "id": 42,
+                                    "isConstant": false,
+                                    "isLValue": false,
+                                    "isPure": true,
+                                    "lValueRequested": false,
+                                    "memberName": "encodePacked",
+                                    "nodeType": "MemberAccess",
+                                    "src": "543:16:0",
+                                    "typeDescriptions": {
+                                      "typeIdentifier": "t_function_abiencodepacked_pure$__$returns$_t_bytes_memory_ptr_$",
+                                      "typeString": "function () pure returns (bytes memory)"
+                                    }
+                                  },
+                                  "id": 44,
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": false,
+                                  "kind": "functionCall",
+                                  "lValueRequested": false,
+                                  "names": [],
+                                  "nodeType": "FunctionCall",
+                                  "src": "543:22:0",
+                                  "tryCall": false,
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_bytes_memory_ptr",
+                                    "typeString": "bytes memory"
+                                  }
+                                }
+                              ],
+                              "expression": {
+                                "argumentTypes": [
+                                  {
+                                    "typeIdentifier": "t_bytes_memory_ptr",
+                                    "typeString": "bytes memory"
+                                  }
+                                ],
+                                "id": 40,
+                                "name": "keccak256",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": -8,
+                                "src": "533:9:0",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
+                                  "typeString": "function (bytes memory) pure returns (bytes32)"
+                                }
+                              },
+                              "id": 45,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "kind": "functionCall",
+                              "lValueRequested": false,
+                              "names": [],
+                              "nodeType": "FunctionCall",
+                              "src": "533:33:0",
+                              "tryCall": false,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_bytes32",
+                                "typeString": "bytes32"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_bytes32",
+                                "typeString": "bytes32"
+                              }
+                            ],
+                            "id": 39,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "ElementaryTypeNameExpression",
+                            "src": "528:4:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_uint256_$",
+                              "typeString": "type(uint256)"
+                            },
+                            "typeName": {
+                              "id": 38,
+                              "name": "uint",
+                              "nodeType": "ElementaryTypeName",
+                              "src": "528:4:0",
+                              "typeDescriptions": {}
+                            }
+                          },
+                          "id": 46,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "528:39:0",
+                          "tryCall": false,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "nodeType": "VariableDeclarationStatement",
+                        "src": "516:51:0"
+                      },
+                      {
+                        "expression": {
+                          "commonType": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          },
+                          "id": 52,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "leftExpression": {
+                            "id": 48,
+                            "name": "rand",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 37,
+                            "src": "583:4:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "nodeType": "BinaryOperation",
+                          "operator": "%",
+                          "rightExpression": {
+                            "commonType": {
+                              "typeIdentifier": "t_rational_10000000000000000_by_1",
+                              "typeString": "int_const 10000000000000000"
+                            },
+                            "id": 51,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "leftExpression": {
+                              "hexValue": "3130",
+                              "id": 49,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "number",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "590:2:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_rational_10_by_1",
+                                "typeString": "int_const 10"
+                              },
+                              "value": "10"
+                            },
+                            "nodeType": "BinaryOperation",
+                            "operator": "**",
+                            "rightExpression": {
+                              "hexValue": "3136",
+                              "id": 50,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "number",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "594:2:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_rational_16_by_1",
+                                "typeString": "int_const 16"
+                              },
+                              "value": "16"
+                            },
+                            "src": "590:6:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_10000000000000000_by_1",
+                              "typeString": "int_const 10000000000000000"
+                            }
+                          },
+                          "src": "583:13:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "functionReturnParameters": 35,
+                        "id": 53,
+                        "nodeType": "Return",
+                        "src": "576:20:0"
+                      }
+                    ]
+                  },
+                  "id": 55,
+                  "implemented": true,
+                  "kind": "function",
+                  "modifiers": [],
+                  "name": "_generateRandomId",
+                  "nodeType": "FunctionDefinition",
+                  "parameters": {
+                    "id": 32,
+                    "nodeType": "ParameterList",
+                    "parameters": [
+                      {
+                        "constant": false,
+                        "id": 31,
+                        "mutability": "mutable",
+                        "name": "_str",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 55,
+                        "src": "468:9:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "typeName": {
+                          "id": 30,
+                          "name": "uint",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "468:4:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "visibility": "internal"
+                      }
+                    ],
+                    "src": "467:11:0"
+                  },
+                  "returnParameters": {
+                    "id": 35,
+                    "nodeType": "ParameterList",
+                    "parameters": [
+                      {
+                        "constant": false,
+                        "id": 34,
+                        "mutability": "mutable",
+                        "name": "",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 55,
+                        "src": "501:4:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "typeName": {
+                          "id": 33,
+                          "name": "uint",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "501:4:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "visibility": "internal"
+                      }
+                    ],
+                    "src": "500:6:0"
+                  },
+                  "scope": 199,
+                  "src": "441:161:0",
+                  "stateMutability": "pure",
+                  "virtual": false,
+                  "visibility": "private"
+                },
+                {
+                  "body": {
+                    "id": 102,
+                    "nodeType": "Block",
+                    "src": "670:311:0",
+                    "statements": [
+                      {
+                        "assignments": [
+                          63
+                        ],
+                        "declarations": [
+                          {
+                            "constant": false,
+                            "id": 63,
+                            "mutability": "mutable",
+                            "name": "_overbid",
+                            "nodeType": "VariableDeclaration",
+                            "scope": 102,
+                            "src": "677:23:0",
+                            "stateVariable": false,
+                            "storageLocation": "memory",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_struct$_Overbid_$18_memory_ptr",
+                              "typeString": "struct OverbidBase.Overbid"
+                            },
+                            "typeName": {
+                              "id": 62,
+                              "name": "Overbid",
+                              "nodeType": "UserDefinedTypeName",
+                              "referencedDeclaration": 18,
+                              "src": "677:7:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_struct$_Overbid_$18_storage_ptr",
+                                "typeString": "struct OverbidBase.Overbid"
+                              }
+                            },
+                            "visibility": "internal"
+                          }
+                        ],
+                        "id": 71,
+                        "initialValue": {
+                          "arguments": [
+                            {
+                              "arguments": [
+                                {
+                                  "id": 66,
+                                  "name": "_price",
+                                  "nodeType": "Identifier",
+                                  "overloadedDeclarations": [],
+                                  "referencedDeclaration": 57,
+                                  "src": "742:6:0",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_uint256",
+                                    "typeString": "uint256"
+                                  }
+                                }
+                              ],
+                              "expression": {
+                                "argumentTypes": [
+                                  {
+                                    "typeIdentifier": "t_uint256",
+                                    "typeString": "uint256"
+                                  }
+                                ],
+                                "id": 65,
+                                "name": "_generateRandomId",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 55,
+                                "src": "724:17:0",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_function_internal_pure$_t_uint256_$returns$_t_uint256_$",
+                                  "typeString": "function (uint256) pure returns (uint256)"
+                                }
+                              },
+                              "id": 67,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "kind": "functionCall",
+                              "lValueRequested": false,
+                              "names": [],
+                              "nodeType": "FunctionCall",
+                              "src": "724:25:0",
+                              "tryCall": false,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            },
+                            {
+                              "id": 68,
+                              "name": "_price",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 57,
+                              "src": "765:6:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            },
+                            {
+                              "id": 69,
+                              "name": "_bid",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 59,
+                              "src": "785:4:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              },
+                              {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              },
+                              {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            ],
+                            "id": 64,
+                            "name": "Overbid",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 18,
+                            "src": "703:7:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_struct$_Overbid_$18_storage_ptr_$",
+                              "typeString": "type(struct OverbidBase.Overbid storage pointer)"
+                            }
+                          },
+                          "id": 70,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "structConstructorCall",
+                          "lValueRequested": false,
+                          "names": [
+                            "id",
+                            "price",
+                            "bid"
+                          ],
+                          "nodeType": "FunctionCall",
+                          "src": "703:94:0",
+                          "tryCall": false,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Overbid_$18_memory_ptr",
+                            "typeString": "struct OverbidBase.Overbid memory"
+                          }
+                        },
+                        "nodeType": "VariableDeclarationStatement",
+                        "src": "677:120:0"
+                      },
+                      {
+                        "expression": {
+                          "arguments": [
+                            {
+                              "id": 75,
+                              "name": "_overbid",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 63,
+                              "src": "820:8:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_struct$_Overbid_$18_memory_ptr",
+                                "typeString": "struct OverbidBase.Overbid memory"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_struct$_Overbid_$18_memory_ptr",
+                                "typeString": "struct OverbidBase.Overbid memory"
+                              }
+                            ],
+                            "expression": {
+                              "id": 72,
+                              "name": "overbids",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 21,
+                              "src": "806:8:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_array$_t_struct$_Overbid_$18_storage_$dyn_storage",
+                                "typeString": "struct OverbidBase.Overbid storage ref[] storage ref"
+                              }
+                            },
+                            "id": 74,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "memberName": "push",
+                            "nodeType": "MemberAccess",
+                            "src": "806:13:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_function_arraypush_nonpayable$_t_struct$_Overbid_$18_storage_$returns$__$",
+                              "typeString": "function (struct OverbidBase.Overbid storage ref)"
+                            }
+                          },
+                          "id": 76,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "functionCall",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "806:23:0",
+                          "tryCall": false,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$__$",
+                            "typeString": "tuple()"
+                          }
+                        },
+                        "id": 77,
+                        "nodeType": "ExpressionStatement",
+                        "src": "806:23:0"
+                      },
+                      {
+                        "assignments": [
+                          79
+                        ],
+                        "declarations": [
+                          {
+                            "constant": false,
+                            "id": 79,
+                            "mutability": "mutable",
+                            "name": "i",
+                            "nodeType": "VariableDeclaration",
+                            "scope": 102,
+                            "src": "836:6:0",
+                            "stateVariable": false,
+                            "storageLocation": "default",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            },
+                            "typeName": {
+                              "id": 78,
+                              "name": "uint",
+                              "nodeType": "ElementaryTypeName",
+                              "src": "836:4:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            },
+                            "visibility": "internal"
+                          }
+                        ],
+                        "id": 84,
+                        "initialValue": {
+                          "commonType": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          },
+                          "id": 83,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "leftExpression": {
+                            "expression": {
+                              "id": 80,
+                              "name": "overbids",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 21,
+                              "src": "845:8:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_array$_t_struct$_Overbid_$18_storage_$dyn_storage",
+                                "typeString": "struct OverbidBase.Overbid storage ref[] storage ref"
+                              }
+                            },
+                            "id": 81,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "memberName": "length",
+                            "nodeType": "MemberAccess",
+                            "src": "845:15:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "nodeType": "BinaryOperation",
+                          "operator": "-",
+                          "rightExpression": {
+                            "hexValue": "31",
+                            "id": 82,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "863:1:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_1_by_1",
+                              "typeString": "int_const 1"
+                            },
+                            "value": "1"
+                          },
+                          "src": "845:19:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "nodeType": "VariableDeclarationStatement",
+                        "src": "836:28:0"
+                      },
+                      {
+                        "expression": {
+                          "id": 89,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "leftHandSide": {
+                            "baseExpression": {
+                              "id": 85,
+                              "name": "overbids",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 21,
+                              "src": "873:8:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_array$_t_struct$_Overbid_$18_storage_$dyn_storage",
+                                "typeString": "struct OverbidBase.Overbid storage ref[] storage ref"
+                              }
+                            },
+                            "id": 87,
+                            "indexExpression": {
+                              "id": 86,
+                              "name": "i",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 79,
+                              "src": "882:1:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            },
+                            "isConstant": false,
+                            "isLValue": true,
+                            "isPure": false,
+                            "lValueRequested": true,
+                            "nodeType": "IndexAccess",
+                            "src": "873:11:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_struct$_Overbid_$18_storage",
+                              "typeString": "struct OverbidBase.Overbid storage ref"
+                            }
+                          },
+                          "nodeType": "Assignment",
+                          "operator": "=",
+                          "rightHandSide": {
+                            "id": 88,
+                            "name": "_overbid",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 63,
+                            "src": "887:8:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_struct$_Overbid_$18_memory_ptr",
+                              "typeString": "struct OverbidBase.Overbid memory"
+                            }
+                          },
+                          "src": "873:22:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Overbid_$18_storage",
+                            "typeString": "struct OverbidBase.Overbid storage ref"
+                          }
+                        },
+                        "id": 90,
+                        "nodeType": "ExpressionStatement",
+                        "src": "873:22:0"
+                      },
+                      {
+                        "eventCall": {
+                          "arguments": [
+                            {
+                              "expression": {
+                                "id": 92,
+                                "name": "msg",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": -15,
+                                "src": "924:3:0",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_magic_message",
+                                  "typeString": "msg"
+                                }
+                              },
+                              "id": 93,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "sender",
+                              "nodeType": "MemberAccess",
+                              "src": "924:10:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address_payable",
+                                "typeString": "address payable"
+                              }
+                            },
+                            {
+                              "expression": {
+                                "id": 94,
+                                "name": "_overbid",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 63,
+                                "src": "935:8:0",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_struct$_Overbid_$18_memory_ptr",
+                                  "typeString": "struct OverbidBase.Overbid memory"
+                                }
+                              },
+                              "id": 95,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "bid",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 17,
+                              "src": "935:12:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            },
+                            {
+                              "expression": {
+                                "id": 96,
+                                "name": "_overbid",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 63,
+                                "src": "948:8:0",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_struct$_Overbid_$18_memory_ptr",
+                                  "typeString": "struct OverbidBase.Overbid memory"
+                                }
+                              },
+                              "id": 97,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "id",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 13,
+                              "src": "948:11:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            },
+                            {
+                              "expression": {
+                                "id": 98,
+                                "name": "_overbid",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 63,
+                                "src": "960:8:0",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_struct$_Overbid_$18_memory_ptr",
+                                  "typeString": "struct OverbidBase.Overbid memory"
+                                }
+                              },
+                              "id": 99,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "price",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 15,
+                              "src": "960:14:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_address_payable",
+                                "typeString": "address payable"
+                              },
+                              {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              },
+                              {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              },
+                              {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            ],
+                            "id": 91,
+                            "name": "overbidCreated",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 11,
+                            "src": "909:14:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_address_$_t_uint256_$_t_uint256_$returns$__$",
+                              "typeString": "function (address,address,uint256,uint256)"
+                            }
+                          },
+                          "id": 100,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "functionCall",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "909:66:0",
+                          "tryCall": false,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$__$",
+                            "typeString": "tuple()"
+                          }
+                        },
+                        "id": 101,
+                        "nodeType": "EmitStatement",
+                        "src": "904:71:0"
+                      }
+                    ]
+                  },
+                  "id": 103,
+                  "implemented": true,
+                  "kind": "function",
+                  "modifiers": [],
+                  "name": "_createOverbid",
+                  "nodeType": "FunctionDefinition",
+                  "parameters": {
+                    "id": 60,
+                    "nodeType": "ParameterList",
+                    "parameters": [
+                      {
+                        "constant": false,
+                        "id": 57,
+                        "mutability": "mutable",
+                        "name": "_price",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 103,
+                        "src": "632:14:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "typeName": {
+                          "id": 56,
+                          "name": "uint256",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "632:7:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "visibility": "internal"
+                      },
+                      {
+                        "constant": false,
+                        "id": 59,
+                        "mutability": "mutable",
+                        "name": "_bid",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 103,
+                        "src": "647:12:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "typeName": {
+                          "id": 58,
+                          "name": "address",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "647:7:0",
+                          "stateMutability": "nonpayable",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "visibility": "internal"
+                      }
+                    ],
+                    "src": "631:29:0"
+                  },
+                  "returnParameters": {
+                    "id": 61,
+                    "nodeType": "ParameterList",
+                    "parameters": [],
+                    "src": "670:0:0"
+                  },
+                  "scope": 199,
+                  "src": "608:373:0",
+                  "stateMutability": "nonpayable",
+                  "virtual": false,
+                  "visibility": "internal"
+                },
+                {
+                  "body": {
+                    "id": 115,
+                    "nodeType": "Block",
+                    "src": "1048:41:0",
+                    "statements": [
+                      {
+                        "expression": {
+                          "arguments": [
+                            {
+                              "id": 111,
+                              "name": "_price",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 105,
+                              "src": "1070:6:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            },
+                            {
+                              "id": 112,
+                              "name": "_bid",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 107,
+                              "src": "1078:4:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              },
+                              {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            ],
+                            "id": 110,
+                            "name": "_createOverbid",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 103,
+                            "src": "1055:14:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_function_internal_nonpayable$_t_uint256_$_t_address_$returns$__$",
+                              "typeString": "function (uint256,address)"
+                            }
+                          },
+                          "id": 113,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "functionCall",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1055:28:0",
+                          "tryCall": false,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$__$",
+                            "typeString": "tuple()"
+                          }
+                        },
+                        "id": 114,
+                        "nodeType": "ExpressionStatement",
+                        "src": "1055:28:0"
+                      }
+                    ]
+                  },
+                  "functionSelector": "f5aa0bc1",
+                  "id": 116,
+                  "implemented": true,
+                  "kind": "function",
+                  "modifiers": [],
+                  "name": "createOverbid",
+                  "nodeType": "FunctionDefinition",
+                  "parameters": {
+                    "id": 108,
+                    "nodeType": "ParameterList",
+                    "parameters": [
+                      {
+                        "constant": false,
+                        "id": 105,
+                        "mutability": "mutable",
+                        "name": "_price",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 116,
+                        "src": "1010:14:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "typeName": {
+                          "id": 104,
+                          "name": "uint256",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "1010:7:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "visibility": "internal"
+                      },
+                      {
+                        "constant": false,
+                        "id": 107,
+                        "mutability": "mutable",
+                        "name": "_bid",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 116,
+                        "src": "1025:12:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "typeName": {
+                          "id": 106,
+                          "name": "address",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "1025:7:0",
+                          "stateMutability": "nonpayable",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "visibility": "internal"
+                      }
+                    ],
+                    "src": "1009:29:0"
+                  },
+                  "returnParameters": {
+                    "id": 109,
+                    "nodeType": "ParameterList",
+                    "parameters": [],
+                    "src": "1048:0:0"
+                  },
+                  "scope": 199,
+                  "src": "987:102:0",
+                  "stateMutability": "nonpayable",
+                  "virtual": false,
+                  "visibility": "external"
+                },
+                {
+                  "body": {
+                    "id": 171,
+                    "nodeType": "Block",
+                    "src": "1171:296:0",
+                    "statements": [
+                      {
+                        "assignments": [
+                          128
+                        ],
+                        "declarations": [
+                          {
+                            "constant": false,
+                            "id": 128,
+                            "mutability": "mutable",
+                            "name": "result",
+                            "nodeType": "VariableDeclaration",
+                            "scope": 171,
+                            "src": "1182:20:0",
+                            "stateVariable": false,
+                            "storageLocation": "memory",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                              "typeString": "uint256[]"
+                            },
+                            "typeName": {
+                              "baseType": {
+                                "id": 126,
+                                "name": "uint",
+                                "nodeType": "ElementaryTypeName",
+                                "src": "1182:4:0",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_uint256",
+                                  "typeString": "uint256"
+                                }
+                              },
+                              "id": 127,
+                              "nodeType": "ArrayTypeName",
+                              "src": "1182:6:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                                "typeString": "uint256[]"
+                              }
+                            },
+                            "visibility": "internal"
+                          }
+                        ],
+                        "id": 134,
+                        "initialValue": {
+                          "arguments": [
+                            {
+                              "hexValue": "31",
+                              "id": 132,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "number",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "1216:1:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_rational_1_by_1",
+                                "typeString": "int_const 1"
+                              },
+                              "value": "1"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_rational_1_by_1",
+                                "typeString": "int_const 1"
+                              }
+                            ],
+                            "id": 131,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "NewExpression",
+                            "src": "1205:10:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_function_objectcreation_pure$_t_uint256_$returns$_t_array$_t_uint256_$dyn_memory_ptr_$",
+                              "typeString": "function (uint256) pure returns (uint256[] memory)"
+                            },
+                            "typeName": {
+                              "baseType": {
+                                "id": 129,
+                                "name": "uint",
+                                "nodeType": "ElementaryTypeName",
+                                "src": "1209:4:0",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_uint256",
+                                  "typeString": "uint256"
+                                }
+                              },
+                              "id": 130,
+                              "nodeType": "ArrayTypeName",
+                              "src": "1209:6:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                                "typeString": "uint256[]"
+                              }
+                            }
+                          },
+                          "id": 133,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "functionCall",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1205:13:0",
+                          "tryCall": false,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                            "typeString": "uint256[] memory"
+                          }
+                        },
+                        "nodeType": "VariableDeclarationStatement",
+                        "src": "1182:36:0"
+                      },
+                      {
+                        "assignments": [
+                          136
+                        ],
+                        "declarations": [
+                          {
+                            "constant": false,
+                            "id": 136,
+                            "mutability": "mutable",
+                            "name": "counter",
+                            "nodeType": "VariableDeclaration",
+                            "scope": 171,
+                            "src": "1229:12:0",
+                            "stateVariable": false,
+                            "storageLocation": "default",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            },
+                            "typeName": {
+                              "id": 135,
+                              "name": "uint",
+                              "nodeType": "ElementaryTypeName",
+                              "src": "1229:4:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            },
+                            "visibility": "internal"
+                          }
+                        ],
+                        "id": 138,
+                        "initialValue": {
+                          "hexValue": "30",
+                          "id": 137,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "1244:1:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_0_by_1",
+                            "typeString": "int_const 0"
+                          },
+                          "value": "0"
+                        },
+                        "nodeType": "VariableDeclarationStatement",
+                        "src": "1229:16:0"
+                      },
+                      {
+                        "body": {
+                          "id": 167,
+                          "nodeType": "Block",
+                          "src": "1299:137:0",
+                          "statements": [
+                            {
+                              "condition": {
+                                "commonType": {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                },
+                                "id": 155,
+                                "isConstant": false,
+                                "isLValue": false,
+                                "isPure": false,
+                                "lValueRequested": false,
+                                "leftExpression": {
+                                  "expression": {
+                                    "baseExpression": {
+                                      "id": 150,
+                                      "name": "overbids",
+                                      "nodeType": "Identifier",
+                                      "overloadedDeclarations": [],
+                                      "referencedDeclaration": 21,
+                                      "src": "1318:8:0",
+                                      "typeDescriptions": {
+                                        "typeIdentifier": "t_array$_t_struct$_Overbid_$18_storage_$dyn_storage",
+                                        "typeString": "struct OverbidBase.Overbid storage ref[] storage ref"
+                                      }
+                                    },
+                                    "id": 152,
+                                    "indexExpression": {
+                                      "id": 151,
+                                      "name": "i",
+                                      "nodeType": "Identifier",
+                                      "overloadedDeclarations": [],
+                                      "referencedDeclaration": 140,
+                                      "src": "1327:1:0",
+                                      "typeDescriptions": {
+                                        "typeIdentifier": "t_uint256",
+                                        "typeString": "uint256"
+                                      }
+                                    },
+                                    "isConstant": false,
+                                    "isLValue": true,
+                                    "isPure": false,
+                                    "lValueRequested": false,
+                                    "nodeType": "IndexAccess",
+                                    "src": "1318:11:0",
+                                    "typeDescriptions": {
+                                      "typeIdentifier": "t_struct$_Overbid_$18_storage",
+                                      "typeString": "struct OverbidBase.Overbid storage ref"
+                                    }
+                                  },
+                                  "id": 153,
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "memberName": "bid",
+                                  "nodeType": "MemberAccess",
+                                  "referencedDeclaration": 17,
+                                  "src": "1318:15:0",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_address",
+                                    "typeString": "address"
+                                  }
+                                },
+                                "nodeType": "BinaryOperation",
+                                "operator": "==",
+                                "rightExpression": {
+                                  "id": 154,
+                                  "name": "_bid",
+                                  "nodeType": "Identifier",
+                                  "overloadedDeclarations": [],
+                                  "referencedDeclaration": 118,
+                                  "src": "1337:4:0",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_address",
+                                    "typeString": "address"
+                                  }
+                                },
+                                "src": "1318:23:0",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_bool",
+                                  "typeString": "bool"
+                                }
+                              },
+                              "id": 166,
+                              "nodeType": "IfStatement",
+                              "src": "1314:111:0",
+                              "trueBody": {
+                                "id": 165,
+                                "nodeType": "Block",
+                                "src": "1343:82:0",
+                                "statements": [
+                                  {
+                                    "expression": {
+                                      "id": 160,
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": false,
+                                      "lValueRequested": false,
+                                      "leftHandSide": {
+                                        "baseExpression": {
+                                          "id": 156,
+                                          "name": "result",
+                                          "nodeType": "Identifier",
+                                          "overloadedDeclarations": [],
+                                          "referencedDeclaration": 128,
+                                          "src": "1362:6:0",
+                                          "typeDescriptions": {
+                                            "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                                            "typeString": "uint256[] memory"
+                                          }
+                                        },
+                                        "id": 158,
+                                        "indexExpression": {
+                                          "id": 157,
+                                          "name": "counter",
+                                          "nodeType": "Identifier",
+                                          "overloadedDeclarations": [],
+                                          "referencedDeclaration": 136,
+                                          "src": "1369:7:0",
+                                          "typeDescriptions": {
+                                            "typeIdentifier": "t_uint256",
+                                            "typeString": "uint256"
+                                          }
+                                        },
+                                        "isConstant": false,
+                                        "isLValue": true,
+                                        "isPure": false,
+                                        "lValueRequested": true,
+                                        "nodeType": "IndexAccess",
+                                        "src": "1362:15:0",
+                                        "typeDescriptions": {
+                                          "typeIdentifier": "t_uint256",
+                                          "typeString": "uint256"
+                                        }
+                                      },
+                                      "nodeType": "Assignment",
+                                      "operator": "=",
+                                      "rightHandSide": {
+                                        "id": 159,
+                                        "name": "i",
+                                        "nodeType": "Identifier",
+                                        "overloadedDeclarations": [],
+                                        "referencedDeclaration": 140,
+                                        "src": "1380:1:0",
+                                        "typeDescriptions": {
+                                          "typeIdentifier": "t_uint256",
+                                          "typeString": "uint256"
+                                        }
+                                      },
+                                      "src": "1362:19:0",
+                                      "typeDescriptions": {
+                                        "typeIdentifier": "t_uint256",
+                                        "typeString": "uint256"
+                                      }
+                                    },
+                                    "id": 161,
+                                    "nodeType": "ExpressionStatement",
+                                    "src": "1362:19:0"
+                                  },
+                                  {
+                                    "expression": {
+                                      "id": 163,
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": false,
+                                      "lValueRequested": false,
+                                      "nodeType": "UnaryOperation",
+                                      "operator": "++",
+                                      "prefix": false,
+                                      "src": "1400:9:0",
+                                      "subExpression": {
+                                        "id": 162,
+                                        "name": "counter",
+                                        "nodeType": "Identifier",
+                                        "overloadedDeclarations": [],
+                                        "referencedDeclaration": 136,
+                                        "src": "1400:7:0",
+                                        "typeDescriptions": {
+                                          "typeIdentifier": "t_uint256",
+                                          "typeString": "uint256"
+                                        }
+                                      },
+                                      "typeDescriptions": {
+                                        "typeIdentifier": "t_uint256",
+                                        "typeString": "uint256"
+                                      }
+                                    },
+                                    "id": 164,
+                                    "nodeType": "ExpressionStatement",
+                                    "src": "1400:9:0"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        },
+                        "condition": {
+                          "commonType": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          },
+                          "id": 146,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "leftExpression": {
+                            "id": 143,
+                            "name": "i",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 140,
+                            "src": "1273:1:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "nodeType": "BinaryOperation",
+                          "operator": "<",
+                          "rightExpression": {
+                            "expression": {
+                              "id": 144,
+                              "name": "overbids",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 21,
+                              "src": "1277:8:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_array$_t_struct$_Overbid_$18_storage_$dyn_storage",
+                                "typeString": "struct OverbidBase.Overbid storage ref[] storage ref"
+                              }
+                            },
+                            "id": 145,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "memberName": "length",
+                            "nodeType": "MemberAccess",
+                            "src": "1277:15:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "src": "1273:19:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_bool",
+                            "typeString": "bool"
+                          }
+                        },
+                        "id": 168,
+                        "initializationExpression": {
+                          "assignments": [
+                            140
+                          ],
+                          "declarations": [
+                            {
+                              "constant": false,
+                              "id": 140,
+                              "mutability": "mutable",
+                              "name": "i",
+                              "nodeType": "VariableDeclaration",
+                              "scope": 168,
+                              "src": "1261:6:0",
+                              "stateVariable": false,
+                              "storageLocation": "default",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              },
+                              "typeName": {
+                                "id": 139,
+                                "name": "uint",
+                                "nodeType": "ElementaryTypeName",
+                                "src": "1261:4:0",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_uint256",
+                                  "typeString": "uint256"
+                                }
+                              },
+                              "visibility": "internal"
+                            }
+                          ],
+                          "id": 142,
+                          "initialValue": {
+                            "hexValue": "30",
+                            "id": 141,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1270:1:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_0_by_1",
+                              "typeString": "int_const 0"
+                            },
+                            "value": "0"
+                          },
+                          "nodeType": "VariableDeclarationStatement",
+                          "src": "1261:10:0"
+                        },
+                        "loopExpression": {
+                          "expression": {
+                            "id": 148,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "nodeType": "UnaryOperation",
+                            "operator": "++",
+                            "prefix": false,
+                            "src": "1294:3:0",
+                            "subExpression": {
+                              "id": 147,
+                              "name": "i",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 140,
+                              "src": "1294:1:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            },
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "id": 149,
+                          "nodeType": "ExpressionStatement",
+                          "src": "1294:3:0"
+                        },
+                        "nodeType": "ForStatement",
+                        "src": "1256:180:0"
+                      },
+                      {
+                        "expression": {
+                          "id": 169,
+                          "name": "result",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 128,
+                          "src": "1453:6:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                            "typeString": "uint256[] memory"
+                          }
+                        },
+                        "functionReturnParameters": 123,
+                        "id": 170,
+                        "nodeType": "Return",
+                        "src": "1446:13:0"
+                      }
+                    ]
+                  },
+                  "functionSelector": "ef406ea6",
+                  "id": 172,
+                  "implemented": true,
+                  "kind": "function",
+                  "modifiers": [],
+                  "name": "getOverbidByBid",
+                  "nodeType": "FunctionDefinition",
+                  "parameters": {
+                    "id": 119,
+                    "nodeType": "ParameterList",
+                    "parameters": [
+                      {
+                        "constant": false,
+                        "id": 118,
+                        "mutability": "mutable",
+                        "name": "_bid",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 172,
+                        "src": "1120:12:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "typeName": {
+                          "id": 117,
+                          "name": "address",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "1120:7:0",
+                          "stateMutability": "nonpayable",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "visibility": "internal"
+                      }
+                    ],
+                    "src": "1119:14:0"
+                  },
+                  "returnParameters": {
+                    "id": 123,
+                    "nodeType": "ParameterList",
+                    "parameters": [
+                      {
+                        "constant": false,
+                        "id": 122,
+                        "mutability": "mutable",
+                        "name": "",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 172,
+                        "src": "1156:13:0",
+                        "stateVariable": false,
+                        "storageLocation": "memory",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                          "typeString": "uint256[]"
+                        },
+                        "typeName": {
+                          "baseType": {
+                            "id": 120,
+                            "name": "uint",
+                            "nodeType": "ElementaryTypeName",
+                            "src": "1156:4:0",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "id": 121,
+                          "nodeType": "ArrayTypeName",
+                          "src": "1156:6:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                            "typeString": "uint256[]"
+                          }
+                        },
+                        "visibility": "internal"
+                      }
+                    ],
+                    "src": "1155:15:0"
+                  },
+                  "scope": 199,
+                  "src": "1095:372:0",
+                  "stateMutability": "view",
+                  "virtual": false,
+                  "visibility": "external"
+                },
+                {
+                  "body": {
+                    "id": 197,
+                    "nodeType": "Block",
+                    "src": "1557:76:0",
+                    "statements": [
+                      {
+                        "expression": {
+                          "components": [
+                            {
+                              "expression": {
+                                "baseExpression": {
+                                  "id": 183,
+                                  "name": "overbids",
+                                  "nodeType": "Identifier",
+                                  "overloadedDeclarations": [],
+                                  "referencedDeclaration": 21,
+                                  "src": "1572:8:0",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_array$_t_struct$_Overbid_$18_storage_$dyn_storage",
+                                    "typeString": "struct OverbidBase.Overbid storage ref[] storage ref"
+                                  }
+                                },
+                                "id": 185,
+                                "indexExpression": {
+                                  "id": 184,
+                                  "name": "_id",
+                                  "nodeType": "Identifier",
+                                  "overloadedDeclarations": [],
+                                  "referencedDeclaration": 174,
+                                  "src": "1581:3:0",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_uint256",
+                                    "typeString": "uint256"
+                                  }
+                                },
+                                "isConstant": false,
+                                "isLValue": true,
+                                "isPure": false,
+                                "lValueRequested": false,
+                                "nodeType": "IndexAccess",
+                                "src": "1572:13:0",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_struct$_Overbid_$18_storage",
+                                  "typeString": "struct OverbidBase.Overbid storage ref"
+                                }
+                              },
+                              "id": 186,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "id",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 13,
+                              "src": "1572:16:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            },
+                            {
+                              "expression": {
+                                "baseExpression": {
+                                  "id": 187,
+                                  "name": "overbids",
+                                  "nodeType": "Identifier",
+                                  "overloadedDeclarations": [],
+                                  "referencedDeclaration": 21,
+                                  "src": "1589:8:0",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_array$_t_struct$_Overbid_$18_storage_$dyn_storage",
+                                    "typeString": "struct OverbidBase.Overbid storage ref[] storage ref"
+                                  }
+                                },
+                                "id": 189,
+                                "indexExpression": {
+                                  "id": 188,
+                                  "name": "_id",
+                                  "nodeType": "Identifier",
+                                  "overloadedDeclarations": [],
+                                  "referencedDeclaration": 174,
+                                  "src": "1598:3:0",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_uint256",
+                                    "typeString": "uint256"
+                                  }
+                                },
+                                "isConstant": false,
+                                "isLValue": true,
+                                "isPure": false,
+                                "lValueRequested": false,
+                                "nodeType": "IndexAccess",
+                                "src": "1589:13:0",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_struct$_Overbid_$18_storage",
+                                  "typeString": "struct OverbidBase.Overbid storage ref"
+                                }
+                              },
+                              "id": 190,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "price",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 15,
+                              "src": "1589:19:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            },
+                            {
+                              "expression": {
+                                "baseExpression": {
+                                  "id": 191,
+                                  "name": "overbids",
+                                  "nodeType": "Identifier",
+                                  "overloadedDeclarations": [],
+                                  "referencedDeclaration": 21,
+                                  "src": "1609:8:0",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_array$_t_struct$_Overbid_$18_storage_$dyn_storage",
+                                    "typeString": "struct OverbidBase.Overbid storage ref[] storage ref"
+                                  }
+                                },
+                                "id": 193,
+                                "indexExpression": {
+                                  "id": 192,
+                                  "name": "_id",
+                                  "nodeType": "Identifier",
+                                  "overloadedDeclarations": [],
+                                  "referencedDeclaration": 174,
+                                  "src": "1618:3:0",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_uint256",
+                                    "typeString": "uint256"
+                                  }
+                                },
+                                "isConstant": false,
+                                "isLValue": true,
+                                "isPure": false,
+                                "lValueRequested": false,
+                                "nodeType": "IndexAccess",
+                                "src": "1609:13:0",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_struct$_Overbid_$18_storage",
+                                  "typeString": "struct OverbidBase.Overbid storage ref"
+                                }
+                              },
+                              "id": 194,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "bid",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 17,
+                              "src": "1609:17:0",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            }
+                          ],
+                          "id": 195,
+                          "isConstant": false,
+                          "isInlineArray": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "TupleExpression",
+                          "src": "1571:56:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$_t_uint256_$_t_uint256_$_t_address_$",
+                            "typeString": "tuple(uint256,uint256,address)"
+                          }
+                        },
+                        "functionReturnParameters": 182,
+                        "id": 196,
+                        "nodeType": "Return",
+                        "src": "1564:63:0"
+                      }
+                    ]
+                  },
+                  "functionSelector": "2e340599",
+                  "id": 198,
+                  "implemented": true,
+                  "kind": "function",
+                  "modifiers": [],
+                  "name": "info",
+                  "nodeType": "FunctionDefinition",
+                  "parameters": {
+                    "id": 175,
+                    "nodeType": "ParameterList",
+                    "parameters": [
+                      {
+                        "constant": false,
+                        "id": 174,
+                        "mutability": "mutable",
+                        "name": "_id",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 198,
+                        "src": "1487:8:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "typeName": {
+                          "id": 173,
+                          "name": "uint",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "1487:4:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "visibility": "internal"
+                      }
+                    ],
+                    "src": "1486:10:0"
+                  },
+                  "returnParameters": {
+                    "id": 182,
+                    "nodeType": "ParameterList",
+                    "parameters": [
+                      {
+                        "constant": false,
+                        "id": 177,
+                        "mutability": "mutable",
+                        "name": "id",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 198,
+                        "src": "1518:10:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "typeName": {
+                          "id": 176,
+                          "name": "uint256",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "1518:7:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "visibility": "internal"
+                      },
+                      {
+                        "constant": false,
+                        "id": 179,
+                        "mutability": "mutable",
+                        "name": "price",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 198,
+                        "src": "1530:13:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "typeName": {
+                          "id": 178,
+                          "name": "uint256",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "1530:7:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "visibility": "internal"
+                      },
+                      {
+                        "constant": false,
+                        "id": 181,
+                        "mutability": "mutable",
+                        "name": "bid",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 198,
+                        "src": "1545:11:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "typeName": {
+                          "id": 180,
+                          "name": "address",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "1545:7:0",
+                          "stateMutability": "nonpayable",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "visibility": "internal"
+                      }
+                    ],
+                    "src": "1517:40:0"
+                  },
+                  "scope": 199,
+                  "src": "1473:160:0",
+                  "stateMutability": "view",
+                  "virtual": false,
+                  "visibility": "public"
+                }
+              ],
+              "scope": 200,
+              "src": "67:1571:0"
+            }
+          ],
+          "src": "40:1598:0"
+        },
+        "id": 0
+      }
+    }
+  }
+}
