@@ -6,28 +6,30 @@ const { BN, expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
 chai.use(require('chai-as-promised'));
 chai.should();
 
-const Overbid = artifacts.require('OverbidBase');
+const OverbidFactory = artifacts.require('OverbidBaseFactory');
 
 contract('OverBidContrat contract', async (accounts) => {
-
-    before(async function (){
-        this.Bid = await ethers.getContractFactory("BidBase");
-    })
     
     const user1 = accounts[1];
+    const user2 = accounts[2];
+
+    before(async function (){
+        this.BidFactory = await ethers.getContractFactory("BidFactory");
+    })
 
     beforeEach(async function () {
-        this.overbid = await Overbid.new();
-        this.bid = await this.Bid.deploy();
-        await this.bid.deployed();
+        this.overbid = await OverbidFactory.new();
+        this.bidFactory = await this.BidFactory.deploy();
+        await this.bidFactory.deployed();
       })
 
     it('should create overbid', async function () {
-        await this.bid.createBid("painting");
-        await this.overbid.createOverbid(10,this.bid.address,{from: user1});
-        let overbids = await this.overbid.getOverbidByBid(this.bid.address);
-        let overbid = await this.overbid.info(overbids[0]);
-        assert.equal(overbid.bid == this.bid.address)
+        await this.bidFactory.deploy("painting");
+        await this.bidFactory.deployed();
+        let bids = await this.bidFactory.getBids();
+        await this.overbid.deploy(10,bids[0],{from: user2});
+        let bidModified = await this.bidFactory.getBid(bids[0]);
+        assert.equal(bidModified.highestPrice.toNumber(),10);
     });
 
 });

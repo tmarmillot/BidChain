@@ -498,8 +498,8 @@
       ]
     },
     "C:\\workspaces\\blockchain\\developpement\\BidChain\\contracts\\BidBase.sol": {
-      "lastModificationDate": 1612521064688,
-      "contentHash": "d483df4c144448c7ec26ad91f9cfecc6",
+      "lastModificationDate": 1612995046906,
+      "contentHash": "72aa918fcb11e08fcbe4761039fc125a",
       "sourceName": "contracts/BidBase.sol",
       "solcConfig": {
         "version": "0.7.3",
@@ -523,7 +523,9 @@
           }
         }
       },
-      "imports": [],
+      "imports": [
+        "./OverbidBase.sol"
+      ],
       "versionPragmas": [
         "^0.7.0"
       ],
@@ -532,8 +534,8 @@
       ]
     },
     "C:\\workspaces\\blockchain\\developpement\\BidChain\\contracts\\OverbidBase.sol": {
-      "lastModificationDate": 1612531478064,
-      "contentHash": "98a059d5b1865900d61dab94f0d92091",
+      "lastModificationDate": 1612994459630,
+      "contentHash": "bbb84d4ae097fe4fc1fb17dd114b078b",
       "sourceName": "contracts/OverbidBase.sol",
       "solcConfig": {
         "version": "0.7.3",
@@ -557,12 +559,86 @@
           }
         }
       },
-      "imports": [],
+      "imports": [
+        "./BidBase.sol"
+      ],
       "versionPragmas": [
         "^0.7.0"
       ],
       "artifacts": [
         "OverbidBase"
+      ]
+    },
+    "C:\\workspaces\\blockchain\\developpement\\BidChain\\contracts\\BidFactory.sol": {
+      "lastModificationDate": 1612995080522,
+      "contentHash": "2e16b849525a4ba0a84ed588a9e3aa4d",
+      "sourceName": "contracts/BidFactory.sol",
+      "solcConfig": {
+        "version": "0.7.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./BidBase.sol"
+      ],
+      "versionPragmas": [
+        "^0.7.0"
+      ],
+      "artifacts": [
+        "BidFactory"
+      ]
+    },
+    "C:\\workspaces\\blockchain\\developpement\\BidChain\\contracts\\OverbidBaseFactory.sol": {
+      "lastModificationDate": 1612995269299,
+      "contentHash": "d2ad720bae0726a59675c6ab4231781e",
+      "sourceName": "contracts/OverbidBaseFactory.sol",
+      "solcConfig": {
+        "version": "0.7.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./BidBase.sol"
+      ],
+      "versionPragmas": [
+        "^0.7.0"
+      ],
+      "artifacts": [
+        "OverbidBaseFactory"
       ]
     }
   }
