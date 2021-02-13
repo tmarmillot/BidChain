@@ -7,28 +7,23 @@ chai.use(require('chai-as-promised'));
 chai.should();
 
 const OverbidFactory = artifacts.require('OverbidBaseFactory');
+const BidFactory = artifacts.require('BidFactory');
 
 contract('OverBidContrat contract', async (accounts) => {
     
     const user1 = accounts[1];
     const user2 = accounts[2];
 
-    before(async function (){
-        this.BidFactory = await ethers.getContractFactory("BidFactory");
-    })
-
-    beforeEach(async function () {
+    beforeEach(async () => {
         this.overbid = await OverbidFactory.new();
-        this.bidFactory = await this.BidFactory.deploy();
-        await this.bidFactory.deployed();
+        this.bidFactory = await BidFactory.new();
       })
 
-    it('should create overbid', async function () {
+    it('should create overbid', async () => {
         await this.bidFactory.deploy("painting");
-        await this.bidFactory.deployed();
-        let bids = await this.bidFactory.getBids();
+        const bids = await this.bidFactory.getBids();
         await this.overbid.deploy(10,bids[0],{from: user2});
-        let bidModified = await this.bidFactory.getBid(bids[0]);
+        const bidModified = await this.bidFactory.getBid(bids[0]);
         assert.equal(bidModified.highestPrice.toNumber(),10);
     });
 
