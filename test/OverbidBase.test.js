@@ -27,4 +27,12 @@ contract('OverBidContrat contract', async (accounts) => {
         assert.equal(bidModified.highestPrice.toNumber(),10);
     });
 
+    it('compute cost of creating bid and bidding', async () => {
+        const { receipt: createBidReceipt } = await this.bidFactory.deploy("painting");
+        const bids = await this.bidFactory.getBids();
+        const { receipt: createOverbidReceipt } = await this.overbid.deploy(10,bids[0],{from: user2});
+        const totalGasCost = createBidReceipt.gasUsed + createOverbidReceipt.gasUsed;
+        console.log(`BidV1: Total cost of creating bid & adding an overbid: ${totalGasCost} gas`);
+    });
+
 });
